@@ -1,5 +1,6 @@
 /* -*- mode: c++; c-basic-offset: 2; -*- vim: set sw=2 tw=70 et sta ai: */
 #include <iostream>
+#include <cassert>
 
 class AD
 {
@@ -17,10 +18,12 @@ class AD
   // though (see comments below).
   AD (real v0, real v1): v{v0, v1} {}
 
-  // No bounds checking, so it should better be private:
+  // There will  be no bounds  checking "in production", so  it should
+  // better be private:
   real
   operator[] (int i) const
   {
+    assert (i == 0 or i == 1);
     return this->v[i];
   }
 
