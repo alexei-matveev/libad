@@ -28,7 +28,8 @@ class AD
 
   // FIXME:  we do  not specialize  operations  for (AD  + number)  or
   // (number - AD).  For the moment we rely on the argument conversion
-  // to lift literal numbers to full blown AD constant:
+  // to lift literal numbers to full blown AD constant. Add "explicit"
+  // here to get an idea of missing specializations:
   AD (real x): v{x, 0.0} {}
 
   // Independent variable with unit slope:
@@ -65,13 +66,36 @@ class AD
   friend AD
   operator+ (const AD &x, const AD &y)
   {
-    return AD (x[0] + y[0], x[1] + y[1]);
+    return AD (x[0] + y[0],
+               x[1] + y[1]);
   }
 
   friend AD
   operator- (const AD &x, const AD &y)
   {
-    return AD (x[0] - y[0], x[1] - y[1]);
+    return AD (x[0] - y[0],
+               x[1] - y[1]);
+  }
+
+  friend AD
+  operator* (const AD &x, const AD &y)
+  {
+    return AD (x[0] * y[0],
+               x[0] * y[1] + x[1] * y[0]);
+  }
+
+  // Should it be private?
+  friend AD
+  recip (const AD &x)
+  {
+    return AD (1 / x[0],
+               - x[1] / (x[0] * x[0]));
+  }
+
+  friend AD
+  operator/ (const AD &x, const AD &y)
+  {
+    return x * recip (y);
   }
 
   // For debug printing only:
@@ -85,7 +109,7 @@ class AD
 template<class T>
 T func (const T &x)
 {
-  return x;
+  return (x * x - 10 + 1010) * 2;
 }
 
 int main ()
@@ -99,4 +123,11 @@ int main ()
   cout << x << " - " << y << " = " << x - y << endl;
   cout << 1 << " - " << y << " = " << 1 - y << endl;
   cout << x << " + " << 100 << " = " << x + 100 << endl;
+  cout << x << " * " << 100 << " = " << x * 100 << endl;
+  cout << x << " * " << x << " = " << x * x << endl;
+  cout << "recip(" << x << ") = " << recip (x) << endl;
+  cout << 1 << " / " << x << ") = " << 1 / x << endl;
+  cout << y << " / " << x << ") = " << y / x << endl;
+  cout << x << " / " << x << ") = " << x / x << endl;
+  cout << "f(" << x << ") = " << func (x) << endl;
 }
