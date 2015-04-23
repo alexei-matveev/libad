@@ -119,9 +119,9 @@ class AD
   friend AD
   tan (const AD &x)
   {
-    const real c = cos (x[0]);
-    return AD (tan (x[0]),
-               x[1] / (c * c));
+    const real t = tan (x[0]);
+    return AD (t,
+               x[1] * (1 + t * t));
   }
 
   friend AD
