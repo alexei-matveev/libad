@@ -124,6 +124,28 @@ class AD
                x[1] / (c * c));
   }
 
+  friend AD
+  atan (const AD &x)
+  {
+    return AD (atan (x[0]),
+               x[1] / (1 + x[0] * x[0]));
+  }
+
+  friend AD
+  exp (const AD &x)
+  {
+    const real e = exp (x[0]);
+    return AD (e,
+               e * x[1]);
+  }
+
+  friend AD
+  log (const AD &x)
+  {
+    return AD (log (x[0]),
+               x[1] / x[0]);
+  }
+
   // For debug printing only:
   friend std::ostream
   &operator<< (std::ostream &stream, const AD &x)
@@ -155,9 +177,15 @@ int main ()
   cout << 1 << " / " << x << ") = " << 1 / x << endl;
   cout << y << " / " << x << ") = " << y / x << endl;
   cout << x << " / " << x << ") = " << x / x << endl;
+  cout << "exp(" << x << ") = " << exp (x) << endl;
+  cout << "log(" << x << ") = " << log (x) << endl;
+  cout << "log(exp(" << x << ")) = " << log (exp (x)) << endl;
+  cout << "exp(log(" << x << ")) = " << exp (log (x)) << endl;
   cout << "sin(" << x << ") = " << sin (x) << endl;
   cout << "cos(" << x << ") = " << cos (x) << endl;
   cout << "tan(" << x << ") = " << tan (x) << endl;
   cout << "tan(" << x << ") = " << sin (x) / cos (x) << endl;
+  cout << "atan(tan(" << x << ")) = " << atan (tan (x)) << endl;
+  cout << "tan(atan(" << x << ")) = " << tan (atan (x)) << endl;
   cout << "f(" << x << ") = " << func (x) << endl;
 }
