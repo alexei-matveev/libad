@@ -1,5 +1,6 @@
 /* -*- mode: c++; c-basic-offset: 2; -*- vim: set sw=2 tw=70 et sta ai: */
 #include <iostream>
+#include <cmath>
 #include <cassert>
 
 class AD
@@ -101,6 +102,28 @@ class AD
     return x * recip (y);
   }
 
+  friend AD
+  sin (const AD &x)
+  {
+    return AD (sin (x[0]),
+               cos (x[0]) * x[1]);
+  }
+
+  friend AD
+  cos (const AD &x)
+  {
+    return AD (cos (x[0]),
+               - sin (x[0]) * x[1]);
+  }
+
+  friend AD
+  tan (const AD &x)
+  {
+    const real c = cos (x[0]);
+    return AD (tan (x[0]),
+               x[1] / (c * c));
+  }
+
   // For debug printing only:
   friend std::ostream
   &operator<< (std::ostream &stream, const AD &x)
@@ -132,5 +155,9 @@ int main ()
   cout << 1 << " / " << x << ") = " << 1 / x << endl;
   cout << y << " / " << x << ") = " << y / x << endl;
   cout << x << " / " << x << ") = " << x / x << endl;
+  cout << "sin(" << x << ") = " << sin (x) << endl;
+  cout << "cos(" << x << ") = " << cos (x) << endl;
+  cout << "tan(" << x << ") = " << tan (x) << endl;
+  cout << "tan(" << x << ") = " << sin (x) / cos (x) << endl;
   cout << "f(" << x << ") = " << func (x) << endl;
 }
