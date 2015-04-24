@@ -149,6 +149,23 @@ class AD
                x[1] / x[0]);
   }
 
+  friend AD
+  sqrt (const AD &x)
+  {
+    const real y = sqrt (x[0]);
+    return AD (y,
+               x[1] / (2 * y));
+  }
+
+  // FIXME: specialize for pow (AD, number):
+  friend AD
+  pow (const AD &x, const AD &y)
+  {
+    const real z = pow (x[0], y[0]);
+    return AD (z,
+               (y[1] * log (x[0]) + y[0] / x[0] * x[1]) * z);
+  }
+
   // For debug printing only:
   friend std::ostream
   &operator<< (std::ostream &stream, const AD &x)

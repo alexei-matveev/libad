@@ -39,6 +39,10 @@ int main ()
   cout << x << " + " << 100 << " = " << x + 100 << endl;
   cout << x << " * " << 100 << " = " << x * 100 << endl;
   cout << x << " * " << x << " = " << x * x << endl;
+  cout << "pow(" << x << ", 2) = " << pow (x, 2) << endl;
+  cout << "sqrt(" << x << ") = " << sqrt (x) << endl;
+  cout << "sqrt(pow(" << x << ", 2)) = " << sqrt (pow (x, 2)) << endl;
+  cout << "pow(sqrt(" << x << "), 2) = " << pow (sqrt (x), 2) << endl;
   cout << "recip(" << x << ") = " << recip (x) << endl;
   cout << 1 << " / " << x << ") = " << 1 / x << endl;
   cout << y << " / " << x << ") = " << y / x << endl;
