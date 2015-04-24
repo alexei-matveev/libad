@@ -33,10 +33,10 @@ class AD
 
  public:
 
-  // FIXME:  we do  not specialize  operations  for (AD  + number)  or
-  // (number - AD).  For the moment we rely on the argument conversion
-  // to lift literal numbers to full blown AD constant. Add "explicit"
-  // here to get an idea of missing specializations:
+  // FIXME: we do not specialize operations for (AD + real) or (real -
+  // AD).  For the  moment we rely on the  argument conversion to lift
+  // literal numbers to full blown AD constant. Add "explicit" here to
+  // get an idea of missing specializations:
   AD (real x): v{x, 0.0} {}
 
   // Independent variable with unit slope:
@@ -157,13 +157,22 @@ class AD
                x[1] / (2 * y));
   }
 
-  // FIXME: specialize for pow (AD, number):
+  // Specializaton  for pow  (AD, real)  is probably  most  used, more
+  // general version pow (AD, AD) below:
+  friend AD
+  pow (const AD &x, real y)
+  {
+    const real z = pow (x[0], y);
+    return AD (z,
+               (y / x[0]) * x[1] * z);
+  }
+
   friend AD
   pow (const AD &x, const AD &y)
   {
     const real z = pow (x[0], y[0]);
     return AD (z,
-               (y[1] * log (x[0]) + y[0] / x[0] * x[1]) * z);
+               (y[1] * log (x[0]) + (y[0] / x[0]) * x[1]) * z);
   }
 
   // For debug printing only:
