@@ -154,11 +154,29 @@ class AD
   }
 };
 
+//
+// This is the example used in libtaylor.
+//
+// Compute a  directional derivative of  f(x, y) in the  direction (1,
+// 2), at point (x, y) =  (3, 4).  This is equivalent to computing the
+// taylor expansion of f(3+1*eps, 4+2*eps) in the variable eps.
+//
+// Reference output for the value and directional derivatives:
+//
+// {9.88847, 50.2665, -10558.6, -666560, 1.20363e+08, 9.72153e+09}
+//
 template<class T>
-T func (const T &x)
+T f2(const T &x, const T &y)
 {
-  return (x * x - 10 + 1010) * 2;
+  return sin (log (7 * x) + exp (y)) + 9;
 }
+
+template<class T>
+T f1 (const T &eps)
+{
+  return f2 (3 + eps, 4 + 2 * eps);
+}
+
 
 int main ()
 {
@@ -187,5 +205,8 @@ int main ()
   cout << "tan(" << x << ") = " << sin (x) / cos (x) << endl;
   cout << "atan(tan(" << x << ")) = " << atan (tan (x)) << endl;
   cout << "tan(atan(" << x << ")) = " << tan (atan (x)) << endl;
-  cout << "f(" << x << ") = " << func (x) << endl;
+  {
+    AD eps = AD::var (0.0);
+    cout << "f1(" << eps << ") = " << f1 (eps) << endl;
+  }
 }
