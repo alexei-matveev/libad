@@ -1,4 +1,7 @@
 /* -*- mode: c++; c-basic-offset: 2; -*- vim: set sw=2 tw=70 et sta ai: */
+#ifndef LIBAD_H
+#define LIBAD_H
+
 #include <iostream>
 #include <cmath>
 #include <cassert>
@@ -153,3 +156,5 @@ class AD
     return stream << "{" << x[0] << ", " << x[1] << "}";
   }
 };
+
+#endif  // ifndef LIBAD_H
